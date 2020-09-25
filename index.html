@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Firebase Image Upload in Javascript</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+  </head>
+  <body>
+    <section>
+      <div class="header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4">
+              <div class="logo">
+                <a href="/">
+                  <img src="/img/finest.png" />
+                </a>
+              </div>
+            </div>
+            <div class="col-sm-8 col-md-8 col-xs-12 col-lg-8">
+              <div class="gif-button">
+                <ul>
+                  <!--<li><a href="#">help</a></li>-->
+                  <!--<li><a href="#">About</a></li>-->
+                  <!--<li><a href="#">Upgrade</a></li>-->
+                  <!--<li><a href="#">Home</a></li>-->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="form-section">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-8 col-md-8 col-xs-12 col-lg-8 d-lg-block">
+              <div class="main-right">
+                <img src="/img/homepageimage.jpg" />
+              </div>
+            </div>
+            <div class="col-xs-10 col-lg-4 col-md-8">
+              <div>
+                <div class="container form-inside">
+                  <br />
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div
+                        class="nav nav-tabs nav-justified"
+                        id="imagetype"
+                        role="tablist"
+                      >
+                        <div id="imagetype-item">
+                          <input
+                            type="radio"
+                            name="uploadtype[]"
+                            value="Flat Image"
+                            id="r2"
+                            checked=""
+                          />
+                          <label class="nav-link checklabel" for="r2">
+                            2D Image
+                          </label>
+                        </div>
+                        <div id="imagetype-item">
+                          <input
+                            type="radio"
+                            name="uploadtype[]"
+                            value="360 Image"
+                            id="r3"
+                          />
+                          <label class="nav-link checklabel" for="r3">
+                            360 Degree Image
+                          </label>
+                        </div>
+                      </div>
+                      <div class="add-img" id="drag-and-drop-zone">
+                        <h4>
+                          <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                        </h4>
+                        <label class="custom-file-upload">
+                          <input type="file" id="photo" name="imagename" />
+                          <i class="fa fa-download" aria-hidden="true"></i>
+                          Drag/Add image (png/jpeg only)
+                        </label>
+                      </div>
+                      <!-- Our markup, the important part here! -->
+                      <!-- File upload preview-->
+                      <div class="image-list">
+                        <ul class="list-unstyled" id="files"></ul>
+                      </div>
+                      <div class="tab-content" id="myTabContent">
+                        <div
+                          class="tab-pane fade text-align form-new active show"
+                          id="home"
+                          role="tabpanel"
+                          aria-labelledby="home-tab"
+                        >
+                          <div class="row form-fild">
+                            <form
+                              name="submit-to-google-sheet"
+                              class="col-md-12"
+                            >
+                              <div class="form-group">
+                                <input
+                                  type="text"
+                                  id="vh_name"
+                                  name="vh_name"
+                                  class="form-control"
+                                  value=""
+                                  required=""
+                                  placeholder="Project Name*"
+                                />
+                              </div>
+                              <div class="form-group">
+                                <input
+                                  type="text"
+                                  id="imagename"
+                                  name="imagename"
+                                  class="form-control"
+                                  value=""
+                                  required=""
+                                  placeholder="image Name*"
+                                />
+                              </div>
+                              <div class="form-group">
+                                <input
+                                  type="text"
+                                  id="send_email"
+                                  name="send_email"
+                                  class="form-control"
+                                  placeholder="Email to:"
+                                />
+                              </div>
+                              <div class="form-group">
+                                <input
+                                  type="text"
+                                  id="your_email"
+                                  name="your_email"
+                                  class="form-control"
+                                  placeholder="Your Emai:"
+                                />
+                              </div>
+                              <button
+                                class="btnsub"
+                                onclick="uploadImage()"
+                                type="submit"
+                              >
+                                Upload Image
+                              </button>
+                              <div class="link"></div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- <input type="file" id="photo" /> -->
+    <!-- <button onclick="uploadImage()">Upload Image</button> -->
+  </body>
+  <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+
+  <script>
+    const scriptURL =
+      "https://script.google.com/macros/s/AKfycbz-Gh1ii4WL6FaxbseJ37MSC8UMeGw8TgE7cc0YmyXNX2aoZxg/exec";
+    const form = document.forms["submit-to-google-sheet"];
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      fetch(scriptURL, { method: "POST", body: new FormData(form) })
+        .then((response) => console.log("Success!", response))
+        .catch((error) => console.error("Error!", error.message));
+    });
+  </script>
+
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyDOd26ECegqsQF56gz1PXsHPtvsn6ZrvMs",
+      authDomain: "fir-b9550.firebaseapp.com",
+      databaseURL: "https://fir-b9550.firebaseio.com",
+      projectId: "fir-b9550",
+      storageBucket: "fir-b9550.appspot.com",
+      messagingSenderId: "87283090214",
+      appId: "1:87283090214:web:5af9e1b0c0ec81c4fe37e7",
+      measurementId: "G-3VLWNBQHX4",
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    console.log(firebase);
+
+    function uploadImage() {
+      const ref = firebase.storage().ref();
+      const file = document.querySelector("#photo").files[0];
+      const name = +new Date() + "-" + file.name;
+      const metadata = {
+        contentType: file.type,
+      };
+      const task = ref.child(name).put(file, metadata);
+      task
+        .then((snapshot) => snapshot.ref.getDownloadURL())
+        .then((url) => {
+          console.log(url);
+          document.querySelector("#image").src = url;
+        })
+        .catch(console.error);
+    }
+  </script>
+</html>
